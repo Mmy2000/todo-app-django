@@ -11,7 +11,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",  # For React or other front-end dev servers
+    "http://localhost:3000",  # For React or other front-end dev servers
     "http://127.0.0.1:8000",  # Django local development server
 ]
 

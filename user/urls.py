@@ -12,6 +12,7 @@ from .views import (
     ProfileView,
     ProfileUpdateView,
 )
+from dj_rest_auth.jwt_auth import get_refresh_view
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
@@ -25,4 +26,5 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("profile/", ProfileView.as_view(), name="profile"),
     path("update_profile/", ProfileUpdateView.as_view(), name="update_profile"),
+    path("token/refresh/", get_refresh_view().as_view(), name="token_refresh"),
 ]

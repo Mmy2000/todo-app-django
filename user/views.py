@@ -71,7 +71,9 @@ class RegisterView(SendOTPEmailMixin, generics.CreateAPIView):
             )
 
         return CustomResponse(
-            data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+            message=serializer.errors,
         )
 
 
@@ -105,11 +107,15 @@ class ActiveAccountView(SendOTPEmailMixin, APIView):
                 )
 
             return CustomResponse(
-                data={"error": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST
+                data={"error": "Invalid OTP"},
+                status=status.HTTP_400_BAD_REQUEST,
+                message="Invalid OTP",
             )
 
         return CustomResponse(
-            data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            data=serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST,
+            message=serializer.errors,
         )
 
 
@@ -134,12 +140,14 @@ class LoginView(APIView):
             return CustomResponse(
                 data={"error": "Invalid credentials"},
                 status=status.HTTP_401_UNAUTHORIZED,
+                message="Invalid credentials",
             )
 
         if not user.check_password(password):
             return CustomResponse(
                 data={"error": "Invalid credentials"},
                 status=status.HTTP_401_UNAUTHORIZED,
+                message="Invalid credentials",
             )
 
         # Tokens & data
