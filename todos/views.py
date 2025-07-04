@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
 from .models import Task, Comment,CommentLike
-from .serializers import TaskSerializer, CommentSerializer
+from .serializers import TaskSerializer, CommentSerializer, SampleTaskSerializer
 from core.pagination import CustomPagination
 from core.responses import CustomResponse
 
@@ -19,7 +19,7 @@ class TaskListCreateView(APIView):
 
         paginator = self.pagination_class()
         paginated_tasks = paginator.paginate_queryset(tasks, request)
-        serializer = TaskSerializer(
+        serializer = SampleTaskSerializer(
             paginated_tasks, many=True, context={"request": request}
         )
         pagination_meta = paginator.get_pagination_meta()

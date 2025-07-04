@@ -103,6 +103,22 @@ class CommentSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class SampleTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = [
+            "id",
+            "owner",
+            "title",
+            "description",
+            "status",
+            "priority",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "owner", "created_at", "updated_at"]
+
+
 class TaskSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
 
