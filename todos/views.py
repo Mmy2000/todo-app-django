@@ -5,7 +5,8 @@ from .models import Task, Comment,CommentLike
 from .serializers import TaskSerializer, CommentSerializer, SampleTaskSerializer
 from core.pagination import CustomPagination
 from core.responses import CustomResponse
-
+from django.utils.dateparse import parse_date
+from django.db.models import Q
 
 class TaskListCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -13,9 +14,34 @@ class TaskListCreateView(APIView):
 
     def get(self, request):
         status_filter = request.query_params.get("status")
+        priority_filter = request.query_params.get("priority")
+        start_date = request.query_params.get("start_date")  # e.g. "2024-08-01"
+        end_date = request.query_params.get("end_date")  # e.g. "2024-08-31"
+        search_query = request.query_params.get("search")  # title/description keyword
+
         tasks = Task.objects.filter(owner=request.user)
+
         if status_filter:
             tasks = tasks.filter(status=status_filter)
+
+        if priority_filter:
+            tasks = tasks.filter(priority=priority_filter)
+
+        if start_date:
+            parsed_start = parse_date(start_date)
+            if parsed_start:
+                tasks = tasks.filter(created_at__date__gte=parsed_start)
+
+        if end_date:
+            parsed_end = parse_date(end_date)
+            if parsed_end:
+                tasks = tasks.filter(created_at__date__lte=parsed_end)
+
+        if search_query:
+            tasks = tasks.filter(
+                Q(title__icontains=search_query)
+                | Q(description__icontains=search_query)
+            )
 
         paginator = self.pagination_class()
         paginated_tasks = paginator.paginate_queryset(tasks, request)
